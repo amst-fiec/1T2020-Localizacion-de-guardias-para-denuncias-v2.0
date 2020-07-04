@@ -4,4 +4,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="reportar">REPORTAR</string>
+    <string name="nombre_completo_text">Nombre Completo</string>
+    <string name="telefono_contacto_text">Telefono de Emergencia</string>
+    <string name="username_text">Nombre de Usuario</string>
+    <string name="email_text">Correo Electrónico</string>
+    <string name="profile_title">Perfil de Usuario</string>
+    <string name="update_perfil">Actualizar Perfil</string>
+
 </resources>
