@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "830829928689",
+    "firebase_url": "https://report-39faa.firebaseio.com",
+    "project_id": "report-39faa",
+    "storage_bucket": "report-39faa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830829928689:android:930db1a31f1c7247f38950",
+        "android_client_info": {
+          "package_name": "TwoReport.com.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830829928689-qof2i5us4pl86puncerrl2kmla81i183.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "TwoReport.com.project",
+            "certificate_hash": "948f846ed21a4dec42158f71241d4b43ef6d6385"
+          }
+        },
+        {
+          "client_id": "830829928689-jrrls7r4k8nvo2ot699eqolnv1hh5ce1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC2GkTy2Un9aul50wYk-2T8q-hMbn023s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830829928689-jrrls7r4k8nvo2ot699eqolnv1hh5ce1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
