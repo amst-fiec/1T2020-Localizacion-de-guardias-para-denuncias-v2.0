@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ACC1"
+    tools:context=".Login">
+
+    <EditText
+        android:id="@+id/txtContra"
+        android:layout_width="282dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="98dp"
+        android:background="#D9FDFBFB"
+        android:drawableLeft="@android:drawable/ic_secure"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUsuario" />
+
+    <EditText
+        android:id="@+id/txtUsuario"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginEnd="100dp"
+        android:background="#D9FDFBFB"
+        android:drawableLeft="@drawable/ic_person"
+        android:ems="10"
+        android:hint="Usuario"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="360dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="143dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="144dp"
+        android:layout_marginBottom="41dp"
+        android:background="#4E555D"
+        android:text="Iniciar Sesion"
+        app:backgroundTint="#4E555D"
+        app:layout_constraintBottom_toTopOf="@+id/btnLoginGoogle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtContra" />
+
+    <Button
+        android:id="@+id/btnLoginGoogle"
+        android:layout_width="148dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="132dp"
+        android:drawableLeft="@drawable/ic_google"
+        android:text="Google"
+        app:backgroundTint="#4E555D"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="405dp"
+        android:layout_height="390dp"
+        app:srcCompat="@drawable/logosf"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="15dp" /><![CDATA[
+
+
+
+    //app:srcCompat="@drawable/ic_logo" />
+
+
+
+]]>
+</androidx.constraintlayout.widget.ConstraintLayout>

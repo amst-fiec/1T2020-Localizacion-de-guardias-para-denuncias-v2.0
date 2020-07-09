@@ -1,5 +1,6 @@
 package TwoReport.com.project;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.VectorDrawable;
@@ -58,11 +59,10 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
 //        return rootView;
         geocoder = new Geocoder(getActivity(), Locale.getDefault());
         try {
-            addresses = geocoder.getFromLocation(-2.145961, -79.96472,1);
+            addresses = geocoder.getFromLocation(-2.145961, -79.96472, 1);
             String add = addresses.get(0).getAddressLine(0);
         } catch (IOException e) {
         }
-
 
 
         report.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +70,11 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                Toast.makeText(getActivity(),"REPORTADO",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "REPORTADO", Toast.LENGTH_LONG).show();
             }
         });
         return view;
     }
-
-
 
 
     @Override
@@ -85,7 +83,7 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
         LatLng sydney = new LatLng(-2.147207, -79.965874);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in ESPOL"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        for (LatLng latlng: dataBase.getGuardias()){
+        for (LatLng latlng : dataBase.getGuardias()) {
             mMap.addMarker(new MarkerOptions().position(latlng).icon(getBitmapDescriptor(R.drawable.ic_guardia)));
         }
         mMap.setMinZoomPreference(18);
@@ -105,5 +103,9 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
             return BitmapDescriptorFactory.fromResource(id);
         }
     }
+
+
+
+
 
 }
