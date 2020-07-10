@@ -1,6 +1,7 @@
 package TwoReport.com.project;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -65,7 +66,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user =firebaseAuth.getCurrentUser();
                 if(user!= null){
-                    goMainScreen();
+                    goMainScreen(user.getDisplayName(),user.getEmail(),user.getPhotoUrl());
                 }
             }
         };
@@ -128,8 +129,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             firebaseAuth.removeAuthStateListener(firebaseauthListener);
         }
     }
-    private void goMainScreen(){
+    private void goMainScreen(String nombre,String email, Uri uri){
         Intent intent= new Intent(this,MainActivity.class);
+        intent.putExtra("nombre",nombre);
+        intent.putExtra("email",email);
+        intent.putExtra("uri",uri.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
