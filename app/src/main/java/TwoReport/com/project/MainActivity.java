@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new ProfileFragment();
                     break;
                 case R.id.outApp:
+
                     finish();
                     System.exit(0);
             }
