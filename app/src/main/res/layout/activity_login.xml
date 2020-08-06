@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ACC1"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".Login">
+
+    <ImageView
+        android:id="@+id/imgLogin"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1"
+        android:src="@drawable/logof"/>
+
+    <EditText
+        android:id="@+id/txtUsuario"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="#D9FDFBFB"
+        android:drawableLeft="@drawable/ic_person"
+        android:ems="10"
+        android:hint="Usuario"
+        android:inputType="textPersonName"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/txtContra"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="#D9FDFBFB"
+        android:drawableLeft="@android:drawable/ic_secure"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textAlignment="center" />
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnLogin"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="143dp"-->
+    <!--        android:layout_marginTop="50dp"-->
+    <!--        android:layout_marginEnd="144dp"-->
+    <!--        android:layout_marginBottom="41dp"-->
+    <!--        android:background="#4E555D"-->
+    <!--        android:onClick="toMainView"-->
+    <!--        android:text="Iniciar Sesion"-->
+    <!--        app:backgroundTint="#4E555D"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/btnLoginGoogle"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.52"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/txtContra" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnLoginGoogle"-->
+    <!--        android:layout_width="148dp"-->
+    <!--        android:layout_height="49dp"-->
+    <!--        android:layout_marginStart="131dp"-->
+    <!--        android:layout_marginTop="15dp"-->
+    <!--        android:layout_marginEnd="132dp"-->
+    <!--        android:drawableLeft="@drawable/ic_google"-->
+    <!--        android:text="Google"-->
+    <!--        app:backgroundTint="#4E555D"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.0"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />-->
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="150dp"
+        android:textAlignment="center">
+
+    </com.google.android.gms.common.SignInButton>
+
+    <![CDATA[
+
+
+
+    //app:srcCompat="@drawable/ic_logo" />
+
+
+
+]]>
+</LinearLayout>
