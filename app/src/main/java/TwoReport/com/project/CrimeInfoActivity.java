@@ -57,19 +57,14 @@ public class CrimeInfoActivity extends AppCompatActivity implements OnMapReadyCa
         issue = info_crime.get("victim_issue");
         lat = Double.parseDouble(info_crime.get("victim_lat"));
         lon = Double.parseDouble(info_crime.get("victim_lon"));
-
         textVictimName.setText(victim_name);
         textVictimEmail.setText(victim_email);
         textVictimPhone.setText(victim_phone);
         textVictimIssue.setText(issue);
-
         Picasso.with(getApplicationContext()).load(victim_photo).into(imagePhoto);
-
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
     }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
