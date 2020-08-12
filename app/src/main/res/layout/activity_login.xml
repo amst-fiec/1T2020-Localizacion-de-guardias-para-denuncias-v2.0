@@ -74,24 +74,15 @@
     <!--        app:layout_constraintHorizontal_bias="0.0"-->
     <!--        app:layout_constraintStart_toStartOf="parent"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />-->
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/signbutton"
+    <Button
+        android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="iniciarSesion"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="150dp"
-        android:textAlignment="center">
-
-    </com.google.android.gms.common.SignInButton>
-
-    <![CDATA[
+        android:textAlignment="center"
+        android:text="Iniciar sesion" />
 
 
-
-    //app:srcCompat="@drawable/ic_logo" />
-
-
-
-]]>
 </LinearLayout>
