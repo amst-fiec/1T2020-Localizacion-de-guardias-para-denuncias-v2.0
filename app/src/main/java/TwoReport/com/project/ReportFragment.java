@@ -69,9 +69,9 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-2.147207, -79.965874);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in ESPOL"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng espol = new LatLng(-2.147207, -79.965874);
+        mMap.addMarker(new MarkerOptions().position(espol).title("Marker in ESPOL"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(espol));
         for (LatLng latlng : dataBase.getGuardias()) {
             mMap.addMarker(new MarkerOptions().position(latlng).icon(getBitmapDescriptor(R.drawable.ic_guardia)));
         }
