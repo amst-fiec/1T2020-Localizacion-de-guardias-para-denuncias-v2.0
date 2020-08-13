@@ -1,145 +1,104 @@
 package TwoReport.com.project;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import java.util.HashMap;
 
-public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseauthListener;
-    private int RC_SIGN_IN=1;
-    private GoogleApiClient googleApiClient;
-    private ImageView logo;
-    private ImageView nombre;
+public class Login extends AppCompatActivity {
+    static final int GOOGLE_SIGN_IN = 123;
+    FirebaseAuth mAuth;
+    GoogleSignInClient mGoogleSignInClient;
+    Button btn_login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        SignInButton signInButton = findViewById(R.id.signbutton);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(intent, RC_SIGN_IN);
-            }
-        });
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseauthListener= new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user =firebaseAuth.getCurrentUser();
-                if(user!= null){
-                    goMainScreen(user.getDisplayName(),user.getEmail(),user.getPhotoUrl());
+        Intent intent = getIntent();
+        String msg = intent.getStringExtra("msg");
+        if(msg != null){
+            if(msg.equals("cerrarSesion")){
+                cerrarSesion();
                 }
             }
-        };
-
     }
 
+    private void cerrarSesion() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                task -> updateUI(null));
+        }
+
+    public void iniciarSesion(View view) {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+    }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        firebaseAuth.addAuthStateListener(firebaseauthListener);
-    }
-
-
-    public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+        if (requestCode == GOOGLE_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(
+                    data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                Log.w("TAG", "Fallo el inicio de sesión con google.", e);
+            }
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
-        if(result.isSuccess()){
-            Toast.makeText(Login.this,"Signed In",Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(result.getSignInAccount());
-        }  else{
-
-            Toast.makeText(Login.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
-
-    private void FirebaseGoogleAuth( GoogleSignInAccount acct){
-
-        AuthCredential authCredential= GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (task.isSuccessful()){
-                            Toast.makeText(Login.this,"Sign In Successfully",Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(Login.this,"Sign In Failed",Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d("TAG", "firebaseAuthWithGoogle:" + acct.getId());
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(),
+                null);
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+                } else {
+                System.out.println("error");
+                updateUI(null);
                 }
-        );
+            });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(firebaseauthListener != null){
-            firebaseAuth.removeAuthStateListener(firebaseauthListener);
-        }
-    }
-    private void goMainScreen(String nombre,String email, Uri uri){
-        Intent intent= new Intent(this,MainActivity.class);
-        intent.putExtra("nombre",nombre);
-        intent.putExtra("email",email);
-        intent.putExtra("uri",uri.toString());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+            HashMap<String, String> info_user = new HashMap<String, String>();
+            info_user.put("user_name", user.getDisplayName());
+            info_user.put("user_email", user.getEmail());
+            info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
+            info_user.put("user_id", user.getUid());
+            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("info_user", info_user);
+            startActivity(intent);
+            } else {
+            System.out.println("sin registrarse");
+            }
     }
 }
