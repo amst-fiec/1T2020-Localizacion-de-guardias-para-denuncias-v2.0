@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="tipoCrimen_array">
+        <item>Robo a mano armada</item>
+        <item>Lesiones menores</item>
+        <item>Robo de celular</item>
+        <item>Otro</item>
+
+    </string-array>
+</resources>
