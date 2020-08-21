@@ -10,6 +10,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.HashMap;
 
+import static TwoReport.com.project.R.id.bottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
     String user_name;
     String user_email;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         user_email = info_user.get("user_email");
         user_photo = info_user.get("user_photo");
         user_id = info_user.get("user_id");
-        BottomNavigationView bottomNavigation= findViewById(R.id.bottomNavigationView);
+        BottomNavigationView bottomNavigation= findViewById(bottomNavigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ReportFragment()).commit();
     }

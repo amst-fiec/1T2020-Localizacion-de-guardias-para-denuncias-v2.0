@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="TwoReport.com.project">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
-        <activity android:name=".ReportCrime"></activity>
+        <activity android:name=".GuardMainActivity"></activity>
+        <activity android:name=".AdminMainActivity" />
+        <activity android:name=".ReportCrime" />
         <activity android:name=".CrimeInfoActivity" />
         <activity android:name=".Login">
             <intent-filter>
@@ -37,5 +36,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>
