@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
-        <activity android:name=".ReportCrime"></activity>
+        <activity android:name=".ReportCrime" />
         <activity android:name=".CrimeInfoActivity" />
         <activity android:name=".Login">
             <intent-filter>

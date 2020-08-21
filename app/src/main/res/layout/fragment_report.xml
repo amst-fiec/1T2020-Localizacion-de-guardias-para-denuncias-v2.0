@@ -34,7 +34,6 @@
             android:layout_margin="0dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:onClick="toReport"
             android:text="@string/reportar"
             app:backgroundTint="#F44336"
             app:elevation="2dp"

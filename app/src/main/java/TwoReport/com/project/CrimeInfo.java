@@ -6,8 +6,15 @@ public class CrimeInfo  {
     private Usuario usuario;
     private Location ubicacion;
     private String descripcion;
-    private Date fecha;
+    private String fecha;
     private String TipoCrimen;
+
+    public CrimeInfo( String descripcion, String fecha, String tipoCrimen) {
+
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        TipoCrimen = tipoCrimen;
+    }
 
     public Usuario getUsuario() {
         return usuario;
@@ -33,11 +40,11 @@ public class CrimeInfo  {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
