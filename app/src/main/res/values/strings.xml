@@ -16,6 +16,10 @@
     <string name="victim_email">Email de la victima</string>
     <string name="victim_issue">Demanda</string>
     <string name="locate">Localización</string>
+    <string name="title_activity_crime_list">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 
 </resources>

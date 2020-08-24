@@ -58,8 +58,8 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onClick(View view) {
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                Toast.makeText(getActivity(), "REPORTADO", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ReportFragment.this.getContext(), ReportCrime.class);
+                startActivity(intent);
             }
         });
         return view;

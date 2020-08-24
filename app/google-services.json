@@ -1,34 +1,20 @@
 {
   "project_info": {
-<<<<<<< HEAD
-    "project_number": "952347318621",
-    "firebase_url": "https://report-4341c.firebaseio.com",
-    "project_id": "report-4341c",
-    "storage_bucket": "report-4341c.appspot.com"
-=======
     "project_number": "932278536963",
     "firebase_url": "https://report-281701.firebaseio.com",
     "project_id": "report-281701",
     "storage_bucket": "report-281701.appspot.com"
->>>>>>> master
   },
   "client": [
     {
       "client_info": {
-<<<<<<< HEAD
-        "mobilesdk_app_id": "1:952347318621:android:f990470a2b9ff2ef97f0b4",
-=======
         "mobilesdk_app_id": "1:932278536963:android:3a87aefb5e34407feff736",
->>>>>>> master
         "android_client_info": {
           "package_name": "TwoReport.com.project"
         }
       },
       "oauth_client": [
         {
-<<<<<<< HEAD
-          "client_id": "952347318621-4ep3p5qijf8boirf49uvqho1igplu8gg.apps.googleusercontent.com",
-=======
           "client_id": "932278536963-38ifvtvn06ibevp889kuj3amt3eeg46o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,28 +24,19 @@
         },
         {
           "client_id": "932278536963-ahdmjcj5m6vqgviq4o32lls7grb6j23o.apps.googleusercontent.com",
->>>>>>> master
           "client_type": 3
         }
       ],
       "api_key": [
         {
-<<<<<<< HEAD
-          "current_key": "AIzaSyDkwVuwF2uH4Q0ITduH5jSJxVHDAorbqfM"
-=======
           "current_key": "AIzaSyBJ4z325W6uyuP5rR-xwrHLAhou4izDvKQ"
->>>>>>> master
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-<<<<<<< HEAD
-              "client_id": "952347318621-4ep3p5qijf8boirf49uvqho1igplu8gg.apps.googleusercontent.com",
-=======
               "client_id": "932278536963-ahdmjcj5m6vqgviq4o32lls7grb6j23o.apps.googleusercontent.com",
->>>>>>> master
               "client_type": 3
             }
           ]
