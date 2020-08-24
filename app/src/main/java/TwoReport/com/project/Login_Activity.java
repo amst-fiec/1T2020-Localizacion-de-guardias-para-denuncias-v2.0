@@ -23,6 +23,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.HashMap;
 
+import TwoReport.com.project.UsuarioPackage.MainActivity;
+import TwoReport.com.project.UsuarioPackage.ProfileFragment;
+
 
 public class Login_Activity extends AppCompatActivity implements
         View.OnClickListener{

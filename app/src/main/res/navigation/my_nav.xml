@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/reportFragment"
-        android:name="TwoReport.com.project.ReportFragment"
+        android:name="TwoReport.com.project.UsuarioPackage.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="TwoReport.com.project.ProfileFragment"
+        android:name="TwoReport.com.project.UsuarioPackage.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

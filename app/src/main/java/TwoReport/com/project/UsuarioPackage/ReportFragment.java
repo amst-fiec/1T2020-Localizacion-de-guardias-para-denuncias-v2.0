@@ -1,4 +1,4 @@
-package TwoReport.com.project;
+package TwoReport.com.project.UsuarioPackage;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,6 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import TwoReport.com.project.DataBase;
+import TwoReport.com.project.R;
+
 /**
  * A simple {@link Fragment} subclass.
  */

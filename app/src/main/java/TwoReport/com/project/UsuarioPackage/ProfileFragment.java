@@ -1,4 +1,4 @@
-package TwoReport.com.project;
+package TwoReport.com.project.UsuarioPackage;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+
+import TwoReport.com.project.R;
 
 
 /**

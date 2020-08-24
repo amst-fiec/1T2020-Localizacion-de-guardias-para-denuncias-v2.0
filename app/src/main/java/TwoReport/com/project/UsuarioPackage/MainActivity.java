@@ -1,4 +1,4 @@
-package TwoReport.com.project;
+package TwoReport.com.project.UsuarioPackage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.HashMap;
+
+import TwoReport.com.project.Login;
+import TwoReport.com.project.R;
 
 import static TwoReport.com.project.R.id.bottomNavigationView;
 
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public void cerrarSesion(){
         FirebaseAuth.getInstance().signOut();
         finish();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Login.class);
         intent.putExtra("msg", "cerrarSesion");
         startActivity(intent);
         }
