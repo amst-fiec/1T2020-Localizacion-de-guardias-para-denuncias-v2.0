@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
-        <activity android:name=".GuardiaPackage.GuardMainActivity"></activity>
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".GuardiaPackage.GuardMainActivity" />
         <activity android:name=".AdministradorPackage.AdminMainActivity" />
         <activity android:name=".ReportCrime" />
         <activity android:name=".CrimeInfoActivity" />
@@ -36,8 +37,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

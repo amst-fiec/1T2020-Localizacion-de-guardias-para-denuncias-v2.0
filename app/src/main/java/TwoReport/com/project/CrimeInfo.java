@@ -6,8 +6,27 @@ public class CrimeInfo  {
     private Usuario usuario;
     private Location ubicacion;
     private String descripcion;
-    private Date fecha;
+    private String lugar;
+    private String fecha;
     private String TipoCrimen;
+
+    public CrimeInfo(Usuario usuario, Location ubicacion, String descripcion,String lugar, String fecha, String tipoCrimen) {
+        this.usuario = usuario;
+        this.ubicacion = ubicacion;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.TipoCrimen = tipoCrimen;
+        this.lugar = lugar;
+
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
 
     public Usuario getUsuario() {
         return usuario;
@@ -33,11 +52,11 @@ public class CrimeInfo  {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 

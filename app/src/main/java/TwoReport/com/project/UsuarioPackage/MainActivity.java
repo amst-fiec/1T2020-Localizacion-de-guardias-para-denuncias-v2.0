@@ -20,20 +20,23 @@ public class MainActivity extends AppCompatActivity {
     String user_email;
     String user_photo;
     String user_id;
+    String user_phone;
+    HashMap<String, String> info_user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Intent i = getIntent();
-        HashMap<String, String> info_user = (HashMap<String, String>) i.getSerializableExtra("info_user");
+        info_user = (HashMap<String, String>) i.getSerializableExtra("info_user");
         user_name = info_user.get("user_name");
         user_email = info_user.get("user_email");
         user_photo = info_user.get("user_photo");
         user_id = info_user.get("user_id");
+        user_phone = info_user.get("user_phone");
         BottomNavigationView bottomNavigation= findViewById(bottomNavigationView);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ReportFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ReportFragment(info_user)).commit();
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.reportFragment:
-                    selectedFragment = new ReportFragment();
+                    selectedFragment = new ReportFragment(info_user);
                     transaction.replace(R.id.container, selectedFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();

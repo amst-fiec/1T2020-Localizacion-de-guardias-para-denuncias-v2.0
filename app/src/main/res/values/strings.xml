@@ -4,18 +4,27 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
-    <string name="reportar">REPORTAR</string>
+    <string name="reportar">REPORTAR AHORA</string>
     <string name="nombre_completo_text">Nombre Completo</string>
     <string name="telefono_contacto_text">Telefono de Emergencia</string>
     <string name="username_text">Nombre de Usuario</string>
     <string name="email_text">Correo Electrónico</string>
     <string name="profile_title">Perfil de Usuario</string>
+    <string name="register_title">Completar Perfil de Usuario</string>
     <string name="update_perfil">Actualizar Perfil</string>
+    <string name="registrar_usuario">Registrar Usuario</string>
     <string name="crime_detail">Detalle del crimen</string>
     <string name="victim_name">Nombre de la victima</string>
     <string name="victim_email">Email de la victima</string>
     <string name="victim_issue">Demanda</string>
     <string name="locate">Localización</string>
+    <string name="tipo_usuario_text">Tipo de Usuario</string>
+    <string name="token_text">Token de Registro</string>
+    <string name="token_input_text">Pegue aquí su Token de registro</string>
+    <string name="report_crime_text">Reportar Crimen</string>
+    <string name="tipo_delito_text">Seleccione el tipo de delito</string>
+    <string name="descripcion_text">Descripción</string>
+    <string name="location_descripcion_text">Descripción de ubicación</string>
 
 
 </resources>

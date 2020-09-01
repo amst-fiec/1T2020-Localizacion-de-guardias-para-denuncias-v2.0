@@ -82,9 +82,18 @@
         android:layout_height="wrap_content"
         android:onClick="iniciarSesion"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="20dp"
         android:textAlignment="center"
         android:text="Iniciar sesion" />
 
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="registrarUsuario"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="50dp"
+        android:textAlignment="center"
+        android:text="Registrarse con Google" />
 
 </LinearLayout>
