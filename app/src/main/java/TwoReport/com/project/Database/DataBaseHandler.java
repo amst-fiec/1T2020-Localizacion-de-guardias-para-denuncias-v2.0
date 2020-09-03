@@ -63,6 +63,7 @@ public class DataBaseHandler {
                 if (snapshot.exists()){
                     Intent intent = new Intent(contexto, MainActivity.class);
                     intent.putExtra("info_user", info_user);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     contexto.startActivity(intent);
                 }else{
                     GuardRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,6 +72,7 @@ public class DataBaseHandler {
                             if (snapshot1.exists()){
                                 Intent intent = new Intent(contexto, GuardMainActivity.class);
                                 intent.putExtra("info_user", info_user);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 contexto.startActivity(intent);
                             }else{
                                 AdminRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -79,6 +81,7 @@ public class DataBaseHandler {
                                         if(snapshot2.exists()){
                                             Intent intent = new Intent(contexto, AdminMainActivity.class);
                                             intent.putExtra("info_user", info_user);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             contexto.startActivity(intent);
                                         }else{
                                             Toast.makeText(contexto,"Usuario no registrado",Toast.LENGTH_LONG);
@@ -392,10 +395,11 @@ public class DataBaseHandler {
     public void enviarReporte(HashMap<String, String> info_user, Location ubicacion, String descripcion,String lugar, Date date, String tipoDeCrimen,Context contexto){
         Usuario user = new Usuario(info_user.get("user_name"),info_user.get("user_email"),info_user.get("user_phone"),info_user.get("user_photo"));
         final String DATE_FORMAT = "dd-MM-yyyy kk:mm:ss";
+        Long tsLong = System.currentTimeMillis()/1000;
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 //        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String fecha = dateFormat.format(date);
-        CrimeInfo reporte = new CrimeInfo(user,ubicacion,descripcion,lugar,fecha,tipoDeCrimen);
+        CrimeInfo reporte = new CrimeInfo(user,ubicacion,descripcion,lugar,fecha,tipoDeCrimen,tsLong);
         this.db.getReference().child("Denuncia").push().setValue(reporte)
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -409,7 +413,27 @@ public class DataBaseHandler {
         });
     }
 
+    public void getDenuncias(){
+        this.db.getReference().child("Denuncia").orderByChild("tsLong")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("Snapshot del guardia y denuncias\n");
+                        System.out.println(snapshot);
+                        for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                            System.out.println("Impresion en orden:  ");
+                            System.out.println(dataSnapshot.getValue());
+                            System.out.println("FIN DE IMPRESION");
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+    }
 
     private BitmapDescriptor getBitmapDescriptor(int id, Resources resources) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

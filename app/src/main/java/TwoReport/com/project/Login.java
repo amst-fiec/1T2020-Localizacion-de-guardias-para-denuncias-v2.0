@@ -62,6 +62,7 @@ public class Login extends AppCompatActivity {
             }
         if (mAuth.getCurrentUser() != null) {
             // User is signed in
+            DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
             FirebaseUser user = mAuth.getCurrentUser();
             HashMap<String, String> info_user = new HashMap<String, String>();
             info_user.put("user_name", user.getDisplayName());
@@ -69,10 +70,11 @@ public class Login extends AppCompatActivity {
             info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
             info_user.put("user_id", user.getUid());
             info_user.put("user_phone", user.getPhoneNumber());
-            Intent i = new Intent(this, MainActivity.class);
-            i.putExtra("info_user",info_user);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+            db.iniciarSesion(this,info_user.get("user_id"),info_user);
+//            Intent i = new Intent(this, MainActivity.class);
+//            i.putExtra("info_user",info_user);
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(i);
         }
     }
 

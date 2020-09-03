@@ -9,15 +9,25 @@ public class CrimeInfo  {
     private String lugar;
     private String fecha;
     private String TipoCrimen;
+    private Long tsLong;
 
-    public CrimeInfo(Usuario usuario, Location ubicacion, String descripcion,String lugar, String fecha, String tipoCrimen) {
+    public CrimeInfo(Usuario usuario, Location ubicacion, String descripcion,String lugar, String fecha, String tipoCrimen,Long tsLong) {
         this.usuario = usuario;
         this.ubicacion = ubicacion;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.TipoCrimen = tipoCrimen;
         this.lugar = lugar;
+        this.tsLong = tsLong;
 
+    }
+
+    public Long getTsLong() {
+        return tsLong;
+    }
+
+    public void setTsLong(Long tsLong) {
+        this.tsLong = tsLong;
     }
 
     public String getLugar() {
