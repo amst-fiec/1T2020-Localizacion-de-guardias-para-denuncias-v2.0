@@ -22,9 +22,9 @@
         android:id="@+id/imv_foto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:minWidth="150dp"
         android:minHeight="150dp"
-        android:layout_gravity="center"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout

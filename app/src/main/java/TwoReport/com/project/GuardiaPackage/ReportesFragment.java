@@ -8,15 +8,16 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -54,56 +55,16 @@ public class ReportesFragment extends Fragment {
         bannerGuardView = view.findViewById(R.id.txtBannerGuard);
         bannerGuardView.setText("Guardia: "+info_user.get("user_name"));
         linearLayoutCards = view.findViewById(R.id.linearLayoutCards);
+
         getDenuncias();
-        printCardView("Winter Alava", "Me robaron la mochila","Parqueadero de FIEC");
+//        printCardView(getContext(),"Winter Alava", "Me robaron la mochila","Parqueadero de FIEC","https://lh3.googleusercontent.com/a-/AOh14Gj_TlIcw7uTFc0GneXRTNjLlpl5ANu5uO1lHArMyA=s96-c","03/09/2020 17:49:05");
         return view;
     }
 
     public void getDenuncias(){
         DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
-        db.getDenuncias();
+        db.getDenuncias(getContext(),linearLayoutCards);
     }
 
-    public void printCardView(String nombre, String descripcion, String lugar){
-        CardView cardView = new CardView(getContext());
-        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-        cardView.setLayoutParams(layoutParams);
-        cardView.setRadius(15);
-        cardView.setCardBackgroundColor(Color.GRAY);
-        cardView.setMaxCardElevation(30);
-        cardView.setMaxCardElevation(6);
-        LinearLayout linearLayoutH = new LinearLayout(getContext());
-        linearLayoutH.setGravity(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layoutParamsH = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayoutH.setWeightSum(4);
-        linearLayoutH.setLayoutParams(layoutParamsH);
 
-        ImageView perfil = new ImageView(getContext());
-        LinearLayout.LayoutParams layoutParamsIV = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsIV.weight = 2;
-        perfil.setLayoutParams(layoutParamsIV);
-        linearLayoutH.addView(perfil);
-
-        LinearLayout linearLayoutH1 = new LinearLayout(getContext());
-        linearLayoutH1.setGravity(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParamsLL = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsLL.weight = 2;
-        linearLayoutH1.setLayoutParams(layoutParamsLL);
-
-
-        TextView tx = new TextView(getContext());
-        tx.setLayoutParams(layoutParams);
-        tx.setText("Holaaaaaaa");
-        tx.setTextColor(Color.BLACK);
-        linearLayoutH1.addView(tx);
-        linearLayoutH.addView(linearLayoutH1);
-
-
-
-
-
-        cardView.addView(linearLayoutH);
-
-        linearLayoutCards.addView(cardView);
-    }
 }

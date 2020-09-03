@@ -4,16 +4,26 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import TwoReport.com.project.Administrador;
 import TwoReport.com.project.AdministradorPackage.AdminMainActivity;
+import TwoReport.com.project.CardCrime;
 import TwoReport.com.project.CrimeInfo;
+import TwoReport.com.project.CrimeInfoActivity;
 import TwoReport.com.project.Guardia;
 import TwoReport.com.project.GuardiaPackage.GuardMainActivity;
 import TwoReport.com.project.Location;
@@ -39,6 +49,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -413,18 +424,43 @@ public class DataBaseHandler {
         });
     }
 
-    public void getDenuncias(){
+    public void getDenuncias(Context context, LinearLayout linearLayout){
+//        linearLayout.setPadding(0,0,0,50);
+
+
         this.db.getReference().child("Denuncia").orderByChild("tsLong")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         System.out.println("Snapshot del guardia y denuncias\n");
-                        System.out.println(snapshot);
+//                        System.out.println(snapshot);
+                        System.out.println("Impresion en orden:  ");
                         for (DataSnapshot dataSnapshot:snapshot.getChildren()){
-                            System.out.println("Impresion en orden:  ");
-                            System.out.println(dataSnapshot.getValue());
-                            System.out.println("FIN DE IMPRESION");
+                            CrimeInfo crime = dataSnapshot.getValue(CrimeInfo.class);
+
+                            System.out.println(crime);
+
+                            CardCrime car = printCardView(context,crime);
+                            car.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent i = new Intent(context, CrimeInfoActivity.class);
+                                    HashMap<String, String> info_crime = new HashMap<String, String>();
+
+                                    info_crime.put("victim_name",car.getCrime().getUsuario().getNombreCompleto());
+                                    info_crime.put("victim_email",car.getCrime().getUsuario().getEmail());
+                                    info_crime.put("victim_photo",car.getCrime().getUsuario().getPhotoUrl());
+                                    info_crime.put("victim_phone",car.getCrime().getUsuario().getTelefono());
+                                    info_crime.put("victim_issue",car.getCrime().getDescripcion());
+                                    info_crime.put("victim_lat",String.valueOf(car.getCrime().getUbicacion().getLatitud()));
+                                    info_crime.put("victim_lon",String.valueOf(car.getCrime().getUbicacion().getLongitud()));
+                                    i.putExtra("info_crime",info_crime);
+                                    context.startActivity(i);
+                                }
+                            });
+                            linearLayout.addView(car);
                         }
+                        System.out.println("FIN DE IMPRESION");
                     }
 
                     @Override
@@ -433,6 +469,72 @@ public class DataBaseHandler {
                     }
                 });
 
+    }
+
+    public CardCrime printCardView(Context context, CrimeInfo crime ){
+        String nombre = crime.getUsuario().getNombreCompleto();
+        String descripcion = crime.getDescripcion();
+        String lugar= crime.getLugar();
+        String uriPhoto = crime.getUsuario().getPhotoUrl();
+        String fecha = crime.getFecha();
+        CardCrime cardView = new CardCrime(context,crime);
+        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        layoutParams.bottomMargin = 80;
+
+        cardView.setLayoutParams(layoutParams);
+        cardView.setRadius(15);
+        cardView.setCardBackgroundColor(Color.parseColor("#E4E6E8"));
+//        cardView.setMaxCardElevation(30);
+//        cardView.setMaxCardElevation(6);
+        LinearLayout linearLayoutH = new LinearLayout(context);
+        linearLayoutH.setGravity(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams layoutParamsH = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayoutH.setWeightSum(4);
+        linearLayoutH.setLayoutParams(layoutParamsH);
+
+        ImageView perfil = new ImageView(context);
+        LinearLayout.LayoutParams layoutParamsIV = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsIV.weight = 1;
+        perfil.setLayoutParams(layoutParamsIV);
+        linearLayoutH.addView(perfil);
+        perfil.setMinimumHeight(250);
+//        layoutParamsIV.gravity = Gravity.START;
+        Picasso.with(context).load(uriPhoto).into(perfil);
+
+        LinearLayout linearLayoutH1 = new LinearLayout(context);
+        linearLayoutH1.setGravity(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParamsLL = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsLL.weight = 3;
+        linearLayoutH1.setPadding(40,15,5,0);
+        linearLayoutH1.setLayoutParams(layoutParamsLL);
+
+
+        TextView tx = new TextView(context);
+        tx.setLayoutParams(layoutParams);
+        String a = fecha+"\n"+nombre+"\n"+descripcion+"\n"+lugar;
+        tx.setText(a);
+        tx.setTextColor(Color.parseColor("#F47F25"));
+        tx.setGravity(Gravity.CENTER);
+//        TextView txname = new TextView(getContext());
+//        txname.setLayoutParams(layoutParams);
+//        txname.setTextColor(Color.BLACK);
+//        txname.setText(nombre);
+
+        linearLayoutH1.addView(tx);
+//        linearLayoutH1.addView(txname);
+//
+//        TextView txdescripcion = new TextView(getContext());
+//        txdescripcion.setLayoutParams(layoutParams);
+//        txdescripcion.setText(descripcion);
+//        txdescripcion.setTextColor(Color.BLACK);
+//        linearLayoutH1.addView(txdescripcion);
+
+        linearLayoutH.addView(linearLayoutH1);
+
+
+        cardView.addView(linearLayoutH);
+        return cardView;
+//        linearLayoutCards.addView(cardView);
     }
 
     private BitmapDescriptor getBitmapDescriptor(int id, Resources resources) {

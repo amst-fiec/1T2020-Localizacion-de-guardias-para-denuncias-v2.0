@@ -11,6 +11,7 @@ public class CrimeInfo  {
     private String TipoCrimen;
     private Long tsLong;
 
+    public CrimeInfo(){}
     public CrimeInfo(Usuario usuario, Location ubicacion, String descripcion,String lugar, String fecha, String tipoCrimen,Long tsLong) {
         this.usuario = usuario;
         this.ubicacion = ubicacion;
