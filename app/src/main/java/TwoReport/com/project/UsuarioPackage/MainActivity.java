@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.profileFragment:
 //                    System.out.println(nombreCompleto);
-                    selectedFragment = new ProfileFragment(user_name,user_email,user_photo);
+                    selectedFragment = new ProfileFragment(user_id,user_name,user_email,user_photo);
                     transaction.replace(R.id.container, selectedFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();

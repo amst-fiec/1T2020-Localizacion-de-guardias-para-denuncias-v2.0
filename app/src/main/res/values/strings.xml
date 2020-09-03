@@ -25,6 +25,8 @@
     <string name="tipo_delito_text">Seleccione el tipo de delito</string>
     <string name="descripcion_text">Descripción</string>
     <string name="location_descripcion_text">Descripción de ubicación</string>
+    <string name="SelectionIbutton">GPS iButton</string>
+    <string name="SelectionGpsEmbed">GPS embebido</string>
 
 
 </resources>

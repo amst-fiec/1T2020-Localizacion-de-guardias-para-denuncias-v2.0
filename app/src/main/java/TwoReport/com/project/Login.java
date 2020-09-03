@@ -131,103 +131,32 @@ public class Login extends AppCompatActivity {
             info_user.put("user_email", user.getEmail());
             info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
             info_user.put("user_id", user.getUid());
+
+
             info_user.put("user_phone", user.getPhoneNumber());
-            /* Verifico que a que tipo de usuario pertenece el Login Entrante*/
             checkUser(user.getUid(),info_user);
+
+            /* Verifico que a que tipo de usuario pertenece el Login Entrante*/
+
             } else {
             System.out.println("sin registrarse");
             }
     }
 
-    void checkUser(String uid,HashMap<String, String> info_user){
+    public void checkUser(String uid,HashMap<String, String> info_user){
 //        System.out.println(uid);
         DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
-
         if (estaRegistrando){
             estaRegistrando = false;
-            finish();
-            Intent i = new Intent(Login.this,RegisterActivity.class);
-            i.putExtra("info_user", info_user);
-            startActivity(i);
+//            finish();
+//            Intent i = new Intent(Login.this,RegisterActivity.class);
+//            i.putExtra("info_user", info_user);
+//            startActivity(i);
+            db.isRegister(this,uid,info_user,mGoogleSignInClient,mAuth);
         }
         if(estaLogeando){
             estaLogeando = false;
             db.iniciarSesion(this,uid,info_user);
         }
-
-//        /* Si el usuario pertenece a la rama de usuarios es un estudiante */
-//        db.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                System.out.println("No entra");
-//                if(estaRegistrando){
-//                    estaRegistrando = false;
-//                    finish();
-//                    Intent i = new Intent(Login.this,RegisterActivity.class);
-//                    i.putExtra("info_user", info_user);
-//                    startActivity(i);
-//
-//                }else if (estaLogeando){
-//                    estaLogeando = false;
-//                    if(dataSnapshot.exists()){
-//                        finish();
-//                        // user exists in the database
-//                        Intent intent = new Intent(Login.this, MainActivity.class);
-//                        intent.putExtra("info_user", info_user);
-//                        startActivity(intent);
-//                    }
-//                    else{
-//                        System.out.println("No entra 1");
-//                        /* Si el usuario pertenece a la rama de guardias es un Guardia */
-//                        db.addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                                if(dataSnapshot.exists()){
-//                                    // user exists in the database
-//                                    Intent intent = new Intent(Login.this, GuardMainActivity.class);
-//                                    intent.putExtra("info_user", info_user);
-//                                    startActivity(intent);
-//                                }else{
-//                                    System.out.println("No entra 2");
-//                                    /* Si el usuario pertenece a la rama de administradores es un Admin */
-//                                    db.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                            if(dataSnapshot.exists()){
-//                                                // user exists in the database
-//                                                Intent intent = new Intent(Login.this, AdminMainActivity.class);
-//                                                intent.putExtra("info_user", info_user);
-//                                                startActivity(intent);
-//                                            }else{
-//                                                System.out.println("No entra 3");
-//                                                FirebaseAuth.getInstance().signOut();
-//                                                mGoogleSignInClient.signOut().addOnCompleteListener(Login.this,
-//                                                        new OnCompleteListener<Void>() {
-//                                                            @Override
-//                                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                                Toast.makeText(Login.this,"Fallo en inicio de sesión",Toast.LENGTH_LONG).show();
-//                                                                updateUI(null);
-//                                                            }
-//                                                        });
-//                                            }
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
-//                                    });
-//                                }
-//                            }
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {}
-//                        });
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                System.out.println("CANCELADO");
-//
-//            }
-//        });
     }
 }

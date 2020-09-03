@@ -8,6 +8,33 @@
     tools:context=".UsuarioPackage.ReportFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnGps"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/SelectionGpsEmbed"
+            app:backgroundTint="#3DDC84"/>
+        <Button
+            android:id="@+id/btnIbutton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/SelectionIbutton"
+            app:backgroundTint="#7F7F7F"/>
+    </LinearLayout>
     <TextView
         android:id="@+id/textConectivity"
         android:layout_width="match_parent"

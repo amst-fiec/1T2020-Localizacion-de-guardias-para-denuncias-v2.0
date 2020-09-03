@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.internal.Objects;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -53,11 +54,13 @@ public class ReportCrime extends AppCompatActivity {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("Denuncia");
 
-        Toast.makeText(getApplicationContext(),"REPORTADO", Toast.LENGTH_LONG).show();
-        DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
-        Date date = Calendar.getInstance().getTime();
-        db.enviarReporte(info_user,location,txtDescripcion.getText().toString(),txtLugar.getText().toString(),date,spinner.getSelectedItem().toString(),this);
-
+        if (txtDescripcion.getText().toString().equals("") || txtLugar.getText().toString().equals("")){
+            Toast.makeText(this,"Ingrese uan descripción y/o lugar correctos",Toast.LENGTH_LONG).show();
+        }else {
+            DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
+            Date date = Calendar.getInstance().getTime();
+            db.enviarReporte(info_user, location, txtDescripcion.getText().toString(), txtLugar.getText().toString(), date, spinner.getSelectedItem().toString(), this);
+        }
     }
 
 

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,6 @@ import androidx.annotation.NonNull;
 import TwoReport.com.project.Administrador;
 import TwoReport.com.project.AdministradorPackage.AdminMainActivity;
 import TwoReport.com.project.CrimeInfo;
-import TwoReport.com.project.DataBase;
 import TwoReport.com.project.Guardia;
 import TwoReport.com.project.GuardiaPackage.GuardMainActivity;
 import TwoReport.com.project.Location;
@@ -23,6 +23,7 @@ import TwoReport.com.project.RegisterActivity;
 import TwoReport.com.project.Usuario;
 import TwoReport.com.project.UsuarioPackage.MainActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -30,10 +31,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,8 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
 
 public class DataBaseHandler {
     FirebaseDatabase db;
@@ -248,44 +245,131 @@ public class DataBaseHandler {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
     }
 
-    public void getGeoLocalizacion(String uid, GoogleMap mMap, Resources resources,Location location){
-        DatabaseReference ubicacionRef = this.db.getReference("Ubicacion/"+uid);
-        DatabaseReference guardiasRef = this.db.getReference("Guardias/");
-
-        System.out.println("JUJU");
-
-        ubicacionRef.addValueEventListener(new ValueEventListener() {
+    public void getPhoneNumer(String uid, TextView phoneView){
+        DatabaseReference userRef = this.db.getReference().child("Usuarios").child(uid).child("telefono");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Entro aqui");
-                System.out.println(snapshot);
-                if (snapshot.exists()){
-                    mMap.clear();
-                    Double latitud = (Double) snapshot.child("latitud").getValue();
-                    Double longitud = (Double) snapshot.child("longitud").getValue();
-                    location.setLatitud(latitud);
-                    location.setLongitud(longitud);
-                    LatLng posicion = new LatLng(latitud, longitud);
-                    mMap.addMarker(new MarkerOptions().position(posicion).title("Estas Aquí"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
-                    mMap.setMinZoomPreference(18);
-                    ArrayList<Marker> markers = new ArrayList();
-                    guardiasRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (Marker m:markers){
-                                m.remove();
-                            }
+                String number = snapshot.getValue().toString();
+                phoneView.setText(number);
+            }
 
-                            for (DataSnapshot guardSnapShot:snapshot.getChildren()){
-                                System.out.println(guardSnapShot);
-                                Double latitud = (Double) guardSnapShot.child("latitud").getValue();
-                                Double longitud = (Double) guardSnapShot.child("longitud").getValue();
-                                LatLng latLngGuard = new LatLng(latitud,longitud);
-                                Marker marker = mMap.addMarker(new MarkerOptions().position(latLngGuard).icon(getBitmapDescriptor(R.drawable.ic_guardia,resources)));
-                                markers.add(marker);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getGeoLocalizacion(String uid, GoogleMap mMap, Resources resources, Location location, boolean incluirUsuario, ArrayList<Marker> guardiasMarkers,Marker[] markerArray){
+        DatabaseReference ubicacionRef = this.db.getReference("Ubicacion/"+uid);
+        DatabaseReference guardiasRef = this.db.getReference("Guardias/");
+        ValueEventListener valueEventListenerGuardias = new ValueEventListener() {
+            ArrayList<Marker> markers = new ArrayList();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (Marker m:markers){
+                    m.remove();
+
+                }
+//                for (Marker m1:guardiasMarkers){
+//                    m1.remove();
+//                }
+                for (DataSnapshot guardSnapShot:snapshot.getChildren()){
+                    System.out.println(guardSnapShot);
+                    Double latitud = (Double) guardSnapShot.child("latitud").getValue();
+                    Double longitud = (Double) guardSnapShot.child("longitud").getValue();
+                    LatLng latLngGuard = new LatLng(latitud,longitud);
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(latLngGuard).icon(getBitmapDescriptor(R.drawable.ic_guardia,resources)));
+                    markers.add(marker);
+                    guardiasMarkers.add(marker);
+                }
+
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        };
+
+        ValueEventListener valueEventListenerUsuario = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                        if (markerArray[0] != null){
+                            markerArray[0].remove();
+                        }
+                        Double latitud = (Double) snapshot.child("latitud").getValue();
+                        Double longitud = (Double) snapshot.child("longitud").getValue();
+                        location.setLatitud(latitud);
+                        location.setLongitud(longitud);
+                        LatLng posicion = new LatLng(latitud, longitud);
+
+                        markerArray[0] = mMap.addMarker(new MarkerOptions().position(posicion).title("Estas Aquí"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
+                        mMap.setMinZoomPreference(18);
+                        if(!incluirUsuario){
+                            if(markerArray[0] != null){
+                            markerArray[0].remove();}
+                        }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+
+        };
+
+        guardiasRef.addValueEventListener(valueEventListenerGuardias);
+        ubicacionRef.addValueEventListener(valueEventListenerUsuario);
+    }
+
+    public void isRegister(Context contexto, String uid, HashMap<String, String> info_user, GoogleSignInClient googleSignInClient,FirebaseAuth mAuth){
+        DatabaseReference guardRef = this.db.getReference("Guardias/"+uid);
+        DatabaseReference adminRef = this.db.getReference("Administradores/"+uid);
+        DatabaseReference userRef = this.db.getReference("Usuarios/"+uid);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Toast.makeText(contexto,"El usuario ya está registrado", Toast.LENGTH_LONG).show();
+                    mAuth.signOut();
+                    googleSignInClient.signOut();
+
+                }else{
+                    guardRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                            if (snapshot1.exists()){
+                                Toast.makeText(contexto,"El usuario ya está registrado", Toast.LENGTH_LONG).show();
+                                mAuth.signOut();
+                                googleSignInClient.signOut();
+
+                            }else{
+                                adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                                        if(snapshot2.exists()){
+                                            Toast.makeText(contexto,"El usuario ya está registrado", Toast.LENGTH_LONG).show();
+                                            mAuth.signOut();
+                                            googleSignInClient.signOut();
+                                        }else{
+                                            Intent i = new Intent(contexto, RegisterActivity.class);
+                                            i.putExtra("info_user", info_user);
+                                            contexto.startActivity(i);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                             }
                         }
 
@@ -294,7 +378,6 @@ public class DataBaseHandler {
 
                         }
                     });
-
                 }
             }
 
@@ -304,16 +387,6 @@ public class DataBaseHandler {
             }
         });
 
-//        DataBase dataBase = new DataBase();
-//        LatLng espol = new LatLng(-2.147207, -79.965874);
-//        mMap.addMarker(new MarkerOptions().position(espol).title("Estas Aquí"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(espol));
-//        mMap.setMinZoomPreference(18);
-//
-//
-//        for (LatLng latlng : dataBase.getGuardias()) {
-//            mMap.addMarker(new MarkerOptions().position(latlng).icon(getBitmapDescriptor(R.drawable.ic_guardia,resources)));
-//        }
     }
 
     public void enviarReporte(HashMap<String, String> info_user, Location ubicacion, String descripcion,String lugar, Date date, String tipoDeCrimen,Context contexto){
@@ -335,6 +408,8 @@ public class DataBaseHandler {
             }
         });
     }
+
+
 
     private BitmapDescriptor getBitmapDescriptor(int id, Resources resources) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
