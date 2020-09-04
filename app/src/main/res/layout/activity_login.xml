@@ -26,7 +26,7 @@
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:background="#D9FDFBFB"
-        android:drawableLeft="@drawable/ic_person"
+        android:drawableLeft="@drawable/ic_profile"
         android:ems="10"
         android:hint="Usuario"
         android:inputType="textPersonName"

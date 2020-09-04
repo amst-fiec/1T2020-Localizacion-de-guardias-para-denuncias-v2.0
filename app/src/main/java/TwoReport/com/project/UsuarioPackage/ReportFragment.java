@@ -72,6 +72,9 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
     final String COLOR_PRESSED = "#3DDC84";
     final String COLOR_NOT_PRESSED = "#7F7F7F";
     Marker[] markerArray = {null};
+    Location locationByGpsEmbed = new Location();
+    boolean primeraVez = true;
+    String selected = "EMBED";
 
     public ReportFragment(HashMap<String, String> info_user){
         this.info_user = info_user;
@@ -87,12 +90,6 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
         Button report = (Button) view.findViewById(R.id.btnReport);
         mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-        geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        try {
-            addresses = geocoder.getFromLocation(-2.145961, -79.96472, 1);
-            String add = addresses.get(0).getAddressLine(0);
-        } catch (IOException e) {
-        }
         conn = (TextView) view.findViewById(R.id.textConectivity);
         location = new Location(0,0);
         embedGpsBtn.setPressed(true);
@@ -102,12 +99,21 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 killHandler(handler,r);
+                killHandler(handlerGps,rGps);
+
 //                getActivity().finish();
+                if(selected.equals("EMBED")){
+                    Intent i = new Intent(getContext(), ReportCrime.class);
+                    i.putExtra("info_user",info_user);
+                    i.putExtra("user_latitud",locationByGpsEmbed.getLatitud());
+                    i.putExtra("user_longitud",locationByGpsEmbed.getLongitud());
+                    startActivity(i);
+                }else{
                 Intent i = new Intent(getContext(), ReportCrime.class);
                 i.putExtra("info_user",info_user);
                 i.putExtra("user_latitud",location.getLatitud());
                 i.putExtra("user_longitud",location.getLongitud());
-                startActivity(i);
+                startActivity(i);}
 //                Toast.makeText(getActivity(), "REPORTADO", Toast.LENGTH_LONG).show();
             }
         });
@@ -124,6 +130,7 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroyView() {
         killHandler(handler,r);
+        killHandler(handlerGps,rGps);
         super.onDestroyView();
     }
 
@@ -142,13 +149,14 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
         embedGpsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                selected = "EMBED";
                 embedGpsBtn.setPressed(true);
                 iButtonGpsBtn.setPressed(false);
                 embedGpsBtn.setBackgroundColor(Color.parseColor(COLOR_PRESSED));
                 iButtonGpsBtn.setBackgroundColor(Color.parseColor(COLOR_NOT_PRESSED));
                 Toast.makeText(getContext(),"Gps Embebido Activado",Toast.LENGTH_LONG).show();
-                handler.postDelayed(rGps, 1000);
-                db.getGeoLocalizacion(info_user.get("user_id"),mMap,getResources(),location,false,GuardiasMarkers,markerArray);
+                handlerGps.postDelayed(rGps, 1000);
+                db.getGeoLocalizacion(getContext(),info_user.get("user_id"),mMap,getResources(),location,false,GuardiasMarkers,markerArray,locationByGpsEmbed);
             }
         });
 
@@ -156,20 +164,21 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
 //                mMap.clear();
+                selected = "IBUTTON";
                 embedGpsBtn.setPressed(false);
                 iButtonGpsBtn.setPressed(true);
                 embedGpsBtn.setBackgroundColor(Color.parseColor(COLOR_NOT_PRESSED));
                 iButtonGpsBtn.setBackgroundColor(Color.parseColor(COLOR_PRESSED));
                 Toast.makeText(getContext(),"Gps iButton Activado",Toast.LENGTH_LONG).show();
-                handler.removeCallbacks(rGps);
+                handlerGps.removeCallbacks(rGps);
                 if (mainMarker != null){
                     mainMarker.remove();
                 }
 
-                db.getGeoLocalizacion(info_user.get("user_id"),mMap,getResources(),location,true,GuardiasMarkers,markerArray);
+                db.getGeoLocalizacion(getContext(),info_user.get("user_id"),mMap,getResources(),location,true,GuardiasMarkers,markerArray,locationByGpsEmbed);
             }
         });
-        firstGpsEmbed();
+
 
     }
 
@@ -185,12 +194,22 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
                             android.location.Location location = task.getResult();
                             if (location != null){
                                 LatLng posicion = new LatLng(location.getLatitude(),location.getLongitude());
+//                                System.out.println("LATITUD     "+String.valueOf(location.getLatitude()));
+//                                System.out.println("LONGITUD     "+String.valueOf(location.getLongitude()));
+                                locationByGpsEmbed.setLatitud(location.getLatitude());
+                                locationByGpsEmbed.setLongitud(location.getLongitude());
+                                if (!(location.getLatitude()==0.0) || !(location.getLongitude()==0.0)){
+                                    if (primeraVez) {
+                                        firstGpsEmbed();
+                                        mMap.setMinZoomPreference(18);
+                                        primeraVez = false;
+                                    }
+                                }
                                 if (mainMarker != null){
                                     mainMarker.remove();
                                 }
                                 mainMarker = mMap.addMarker(new MarkerOptions().position(posicion).title("Estas En el Empalme"));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
-                                mMap.setMinZoomPreference(18);
                             }
                         }
                     });
@@ -199,11 +218,11 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
                 }}catch (NullPointerException e){}
 
 
-                handler.postDelayed(this, 1000);
+                handlerGps.postDelayed(this, 1000);
             }
         };
 
-
+        handlerGps.postDelayed(rGps,1000);
     }
 
     public void firstGpsEmbed(){
@@ -213,9 +232,14 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
         embedGpsBtn.setBackgroundColor(Color.parseColor(COLOR_PRESSED));
         iButtonGpsBtn.setBackgroundColor(Color.parseColor(COLOR_NOT_PRESSED));
         Toast.makeText(getContext(),"Gps Embebido Activado",Toast.LENGTH_LONG).show();
-        handler.postDelayed(rGps, 1000);
-        db.getGeoLocalizacion(info_user.get("user_id"),mMap,getResources(),location,false,GuardiasMarkers,markerArray);
+//        handlerGps.postDelayed(rGps, 1000);
+//        location.setLongitud(locationByGpsEmbed.getLongitud());
+//        location.setLatitud(locationByGpsEmbed.getLatitud());
+//        System.out.println("LATITUD     "+String.valueOf(locationByGpsEmbed.getLatitud()));
+//        System.out.println("LONGITUD     "+String.valueOf(locationByGpsEmbed.getLatitud()));
+        db.getGeoLocalizacion(getContext(),info_user.get("user_id"),mMap,getResources(),location,false,GuardiasMarkers,markerArray,locationByGpsEmbed);
     }
+
     public void checkConn(){
         handler = new Handler();
 
@@ -239,20 +263,5 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
 
         handler.postDelayed(r, 1000);
     }
-//    private BitmapDescriptor getBitmapDescriptor(int id) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            VectorDrawable vectorDrawable = (VectorDrawable) getResources().getDrawable(id);
-//            int h = vectorDrawable.getIntrinsicHeight();
-//            int w = vectorDrawable.getIntrinsicWidth();
-//            vectorDrawable.setBounds(0, 0, w, h);
-//            Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-//            Canvas canvas = new Canvas(bm);
-//            vectorDrawable.draw(canvas);
-//            return BitmapDescriptorFactory.fromBitmap(bm);
-//        } else {
-//            return BitmapDescriptorFactory.fromResource(id);
-//        }
-//    }
-
 
 }

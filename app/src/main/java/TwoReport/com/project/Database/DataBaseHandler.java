@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,7 +64,7 @@ public class DataBaseHandler {
         this.db = db;
     }
 
-    public void iniciarSesion(Context contexto,String uid,HashMap<String,String> info_user){
+    public void iniciarSesion(Context contexto,String uid,HashMap<String,String> info_user,GoogleSignInClient mGoogleSignInClient){
         DatabaseReference UserRef = this.db.getReference("Usuarios/"+uid);
         DatabaseReference GuardRef = this.db.getReference("Guardias/"+uid);
         DatabaseReference AdminRef = this.db.getReference("Administradores/"+uid);
@@ -95,8 +96,9 @@ public class DataBaseHandler {
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             contexto.startActivity(intent);
                                         }else{
-                                            Toast.makeText(contexto,"Usuario no registrado",Toast.LENGTH_LONG);
+                                            Toast.makeText(contexto,"Usuario no registrado",Toast.LENGTH_LONG).show();
                                             FirebaseAuth.getInstance().signOut();
+                                            mGoogleSignInClient.signOut();
                                         }
                                     }
 
@@ -278,9 +280,10 @@ public class DataBaseHandler {
         });
     }
 
-    public void getGeoLocalizacion(String uid, GoogleMap mMap, Resources resources, Location location, boolean incluirUsuario, ArrayList<Marker> guardiasMarkers,Marker[] markerArray){
+    public void getGeoLocalizacion(Context context,String uid, GoogleMap mMap, Resources resources, Location location, boolean incluirUsuario, ArrayList<Marker> guardiasMarkers,Marker[] markerArray,Location locationByGpsEmbed){
         DatabaseReference ubicacionRef = this.db.getReference("Ubicacion/"+uid);
         DatabaseReference guardiasRef = this.db.getReference("Guardias/");
+        ArrayList<Marker> markersGuardias = new ArrayList();
         ValueEventListener valueEventListenerGuardias = new ValueEventListener() {
             ArrayList<Marker> markers = new ArrayList();
             @Override
@@ -293,6 +296,7 @@ public class DataBaseHandler {
 //                for (Marker m1:guardiasMarkers){
 //                    m1.remove();
 //                }
+                boolean cercanos = false;
                 for (DataSnapshot guardSnapShot:snapshot.getChildren()){
                     System.out.println(guardSnapShot);
                     Double latitud = (Double) guardSnapShot.child("latitud").getValue();
@@ -301,7 +305,31 @@ public class DataBaseHandler {
                     Marker marker = mMap.addMarker(new MarkerOptions().position(latLngGuard).icon(getBitmapDescriptor(R.drawable.ic_guardia,resources)));
                     markers.add(marker);
                     guardiasMarkers.add(marker);
+                    markersGuardias.add(marker);
+                    Double lat1=marker.getPosition().latitude;
+                    Double lat2=location.getLatitud();
+                    Double long1=marker.getPosition().longitude;
+                    Double long2=location.getLongitud();
+                    Double R = 6371e3;
+                    Double phi1 = lat1 * Math.PI/180;
+                    Double phi2 = lat2 * Math.PI/180;
+                    Double deltaphi = (lat2-lat1) * Math.PI/180;
+                    Double deltalambda = (long2-long1) * Math.PI/180;
+
+                    Double a = Math.sin(deltaphi/2) * Math.sin(deltaphi/2) + Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltalambda/2) * Math.sin(deltalambda/2);
+                    Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                    Double d = R * c;
+
+                    cercanos = cercanos || (d<100);
+                    System.out.println("DISTANCIA: \n");
+                    System.out.println(d);
                 }
+                if(cercanos==false){
+                    if(incluirUsuario==true){
+                    Toast.makeText(context,"No existen guardias cercanos a 100 mts",Toast.LENGTH_LONG).show();
+                    }
+                }
+
 
 
             }
@@ -329,7 +357,11 @@ public class DataBaseHandler {
                         if(!incluirUsuario){
                             if(markerArray[0] != null){
                             markerArray[0].remove();}
+//                            location.setLongitud(locationByGpsEmbed.getLongitud());
+//                            location.setLatitud(locationByGpsEmbed.getLatitud());
                         }
+
+
 
                 }
             }
@@ -424,7 +456,7 @@ public class DataBaseHandler {
         });
     }
 
-    public void getDenuncias(Context context, LinearLayout linearLayout){
+    public void getDenuncias(Context context, LinearLayout linearLayout, TextView noHayDelitosView){
 //        linearLayout.setPadding(0,0,0,50);
 
 
@@ -432,40 +464,46 @@ public class DataBaseHandler {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        System.out.println("Snapshot del guardia y denuncias\n");
+                        if (snapshot.exists()){
+                            linearLayout.removeAllViews();
+                            System.out.println("Snapshot del guardia y denuncias\n");
 //                        System.out.println(snapshot);
-                        System.out.println("Impresion en orden:  ");
-                        for (DataSnapshot dataSnapshot:snapshot.getChildren()){
-                            CrimeInfo crime = dataSnapshot.getValue(CrimeInfo.class);
+                            System.out.println("Impresion en orden:  ");
+                            for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                                CrimeInfo crime = dataSnapshot.getValue(CrimeInfo.class);
 
-                            System.out.println(crime);
+                                System.out.println(crime);
 
-                            CardCrime car = printCardView(context,crime);
-                            car.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent i = new Intent(context, CrimeInfoActivity.class);
-                                    HashMap<String, String> info_crime = new HashMap<String, String>();
+                                CardCrime car = printCardView(context,crime);
+                                car.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent i = new Intent(context, CrimeInfoActivity.class);
+                                        HashMap<String, String> info_crime = new HashMap<String, String>();
 
-                                    info_crime.put("victim_name",car.getCrime().getUsuario().getNombreCompleto());
-                                    info_crime.put("victim_email",car.getCrime().getUsuario().getEmail());
-                                    info_crime.put("victim_photo",car.getCrime().getUsuario().getPhotoUrl());
-                                    info_crime.put("victim_phone",car.getCrime().getUsuario().getTelefono());
-                                    info_crime.put("victim_issue",car.getCrime().getDescripcion());
-                                    info_crime.put("victim_lat",String.valueOf(car.getCrime().getUbicacion().getLatitud()));
-                                    info_crime.put("victim_lon",String.valueOf(car.getCrime().getUbicacion().getLongitud()));
-                                    i.putExtra("info_crime",info_crime);
-                                    context.startActivity(i);
-                                }
-                            });
-                            linearLayout.addView(car);
+                                        info_crime.put("victim_name",car.getCrime().getUsuario().getNombreCompleto());
+                                        info_crime.put("victim_email",car.getCrime().getUsuario().getEmail());
+                                        info_crime.put("victim_photo",car.getCrime().getUsuario().getPhotoUrl());
+                                        info_crime.put("victim_phone",car.getCrime().getUsuario().getTelefono());
+                                        info_crime.put("victim_issue",car.getCrime().getDescripcion());
+                                        info_crime.put("victim_lat",String.valueOf(car.getCrime().getUbicacion().getLatitud()));
+                                        info_crime.put("victim_lon",String.valueOf(car.getCrime().getUbicacion().getLongitud()));
+                                        i.putExtra("info_crime",info_crime);
+                                        context.startActivity(i);
+                                    }
+                                });
+                                linearLayout.addView(car);
+                            }
+                            System.out.println("FIN DE IMPRESION");
+                        }else{
+                            linearLayout.removeAllViews();
+                            linearLayout.addView(noHayDelitosView);
                         }
-                        System.out.println("FIN DE IMPRESION");
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(context,"No tiene conexión a internet",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -535,6 +573,35 @@ public class DataBaseHandler {
         cardView.addView(linearLayoutH);
         return cardView;
 //        linearLayoutCards.addView(cardView);
+    }
+
+    public void getMarksDenuncias(Context context, GoogleMap mMap, Resources resources){
+        DatabaseReference delitosRef = this.db.getReference().child("Denuncia");
+        delitosRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mMap.clear();
+                if (snapshot.exists()){
+                    for(DataSnapshot snapshot1:snapshot.getChildren()){
+
+                        CrimeInfo denuncia = snapshot1.getValue(CrimeInfo.class);
+                        System.out.println(denuncia);
+                        Location location = denuncia.getUbicacion();
+                        LatLng latLng = new LatLng(location.getLatitud(),location.getLongitud());
+                        mMap.addMarker(new MarkerOptions().position(latLng).icon(getBitmapDescriptor(R.drawable.ic_person,resources)).title(denuncia.getUsuario().getNombreCompleto()));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        mMap.setMinZoomPreference(18);
+                    }
+                }else{
+                    Toast.makeText(context,"Aún no hay denuncias registradas",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private BitmapDescriptor getBitmapDescriptor(int id, Resources resources) {

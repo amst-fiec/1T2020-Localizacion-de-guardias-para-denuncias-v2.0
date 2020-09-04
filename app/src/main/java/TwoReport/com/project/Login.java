@@ -70,7 +70,7 @@ public class Login extends AppCompatActivity {
             info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
             info_user.put("user_id", user.getUid());
             info_user.put("user_phone", user.getPhoneNumber());
-            db.iniciarSesion(this,info_user.get("user_id"),info_user);
+            db.iniciarSesion(this,info_user.get("user_id"),info_user,mGoogleSignInClient);
 //            Intent i = new Intent(this, MainActivity.class);
 //            i.putExtra("info_user",info_user);
 //            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -158,7 +158,7 @@ public class Login extends AppCompatActivity {
         }
         if(estaLogeando){
             estaLogeando = false;
-            db.iniciarSesion(this,uid,info_user);
+            db.iniciarSesion(this,uid,info_user,mGoogleSignInClient);
         }
     }
 }
