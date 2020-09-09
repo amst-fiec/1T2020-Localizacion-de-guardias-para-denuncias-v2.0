@@ -2,7 +2,10 @@ package TwoReport.com.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -54,12 +57,23 @@ public class ReportCrime extends AppCompatActivity {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("Denuncia");
 
-        if (txtDescripcion.getText().toString().equals("") || txtLugar.getText().toString().equals("")){
-            Toast.makeText(this,"Ingrese uan descripción y/o lugar correctos",Toast.LENGTH_LONG).show();
-        }else {
-            DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
-            Date date = Calendar.getInstance().getTime();
-            db.enviarReporte(info_user, location, txtDescripcion.getText().toString(), txtLugar.getText().toString(), date, spinner.getSelectedItem().toString(), this);
+        if (txtDescripcion.getText().toString().equals("") && txtLugar.getText().toString().equals("")){
+            Toast.makeText(this,"Ingrese una descripción y lugar correctos",Toast.LENGTH_LONG).show();
+        }else if((txtDescripcion.getText().toString().equals(""))){
+            Toast.makeText(this,"Ingrese una descripción correcta",Toast.LENGTH_LONG).show();
+        }else if(txtLugar.getText().toString().equals("")){
+            Toast.makeText(this,"Ingrese un Lugar correcto",Toast.LENGTH_LONG).show();
+        }else{
+            ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo nInfo = cm.getActiveNetworkInfo();
+            boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+            if (connected){
+                DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
+                Date date = Calendar.getInstance().getTime();
+                db.enviarReporte(info_user, location, txtDescripcion.getText().toString(), txtLugar.getText().toString(), date, spinner.getSelectedItem().toString(), this);
+            }else{
+                Toast.makeText(this,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
+            }
         }
     }
 

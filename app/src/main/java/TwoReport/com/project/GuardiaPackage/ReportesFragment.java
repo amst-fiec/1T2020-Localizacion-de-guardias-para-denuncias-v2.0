@@ -29,7 +29,7 @@ import TwoReport.com.project.R;
 
 
 public class ReportesFragment extends Fragment {
-
+    public String uid;
     public HashMap<String, String> info_user;
     public TextView bannerGuardView;
     public LinearLayout linearLayoutCards;
@@ -45,7 +45,7 @@ public class ReportesFragment extends Fragment {
     public ReportesFragment(HashMap<String, String> info_user,Context context){
         this.info_user = info_user;
         this.context = context;
-
+        uid= info_user.get("user_id");
     }
 
 //    @Override
@@ -78,7 +78,7 @@ public class ReportesFragment extends Fragment {
 
     public void getDenuncias(){
         DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
-        db.getDenuncias(getContext(),linearLayoutCards,noHayDelitosView);
+        db.getDenuncias(getContext(),linearLayoutCards,noHayDelitosView,uid);
     }
 
     @Override

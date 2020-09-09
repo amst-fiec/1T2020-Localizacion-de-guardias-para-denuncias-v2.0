@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.VectorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
@@ -72,56 +74,63 @@ public class DataBaseHandler {
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    Intent intent = new Intent(contexto, MainActivity.class);
-                    intent.putExtra("info_user", info_user);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    contexto.startActivity(intent);
-                }else{
-                    GuardRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                            if (snapshot1.exists()){
-                                Intent intent = new Intent(contexto, GuardMainActivity.class);
-                                intent.putExtra("info_user", info_user);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                contexto.startActivity(intent);
-                            }else{
-                                AdminRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot2) {
-                                        if(snapshot2.exists()){
-                                            Intent intent = new Intent(contexto, AdminMainActivity.class);
-                                            intent.putExtra("info_user", info_user);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            contexto.startActivity(intent);
-                                        }else{
-                                            Toast.makeText(contexto,"Usuario no registrado",Toast.LENGTH_LONG).show();
-                                            FirebaseAuth.getInstance().signOut();
-                                            mGoogleSignInClient.signOut();
+                ConnectivityManager cm = (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                if (connected){
+                    if (snapshot.exists()){
+                        Intent intent = new Intent(contexto, MainActivity.class);
+                        intent.putExtra("info_user", info_user);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        contexto.startActivity(intent);
+                    }else{
+                        GuardRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                                if (snapshot1.exists()){
+                                    Intent intent = new Intent(contexto, GuardMainActivity.class);
+                                    intent.putExtra("info_user", info_user);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    contexto.startActivity(intent);
+                                }else{
+                                    AdminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                                            if(snapshot2.exists()){
+                                                Intent intent = new Intent(contexto, AdminMainActivity.class);
+                                                intent.putExtra("info_user", info_user);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                contexto.startActivity(intent);
+                                            }else{
+                                                Toast.makeText(contexto,"Usuario no registrado",Toast.LENGTH_LONG).show();
+                                                FirebaseAuth.getInstance().signOut();
+                                                mGoogleSignInClient.signOut();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                    }
-                                });
+                                        }
+                                    });
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                        });
+                    }
+                }else{
+                    Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -132,33 +141,40 @@ public class DataBaseHandler {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
-                }else{
-                    userRef.setValue(usuario)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    // Write was successful!
-                                    Toast.makeText(contexto,"Usuario registrado correctamente",Toast.LENGTH_LONG).show();
-                                    Intent i = new Intent(contexto,MainActivity.class);
-                                    i.putExtra("info_user",info_user);
-                                    contexto.startActivity(i);
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Write failed
-                                    Toast.makeText(contexto,"Fallo en registro de Usuario",Toast.LENGTH_LONG).show();
+                ConnectivityManager cm = (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                if (connected){
+                    if (snapshot.exists()){
+                        Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
+                    }else{
+                        userRef.setValue(usuario)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // Write was successful!
+                                        Toast.makeText(contexto,"Usuario registrado correctamente",Toast.LENGTH_LONG).show();
+                                        Intent i = new Intent(contexto,MainActivity.class);
+                                        i.putExtra("info_user",info_user);
+                                        contexto.startActivity(i);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Write failed
+                                        Toast.makeText(contexto,"Fallo en registro de Usuario",Toast.LENGTH_LONG).show();
 
-                                }
-                            });
+                                    }
+                                });
+                    }
+                }else{
+                    Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -170,44 +186,53 @@ public class DataBaseHandler {
         tokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot0) {
-                if (snapshot0.exists()){
-                    if (snapshot0.getValue().toString().equals("Guardias")){
-                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
-                                }else{
-                                    userRef.setValue(guardia)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    // Write was successful!
-                                                    Toast.makeText(contexto,"Guardia registrado correctamente",Toast.LENGTH_LONG).show();
-                                                    Intent i = new Intent(contexto,GuardMainActivity.class);
-                                                    i.putExtra("info_user",info_user);
-                                                    contexto.startActivity(i);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    // Write failed
-                                                    Toast.makeText(contexto,"Fallo en registro de Guardia",Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                ConnectivityManager cm = (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                if(connected){
+                    if (snapshot0.exists()){
+                        if (snapshot0.getValue().toString().equals("Guardias")){
+                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
+                                    }else{
+                                        userRef.setValue(guardia)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Write was successful!
+                                                        Toast.makeText(contexto,"Guardia registrado correctamente",Toast.LENGTH_LONG).show();
+                                                        Intent i = new Intent(contexto,GuardMainActivity.class);
+                                                        i.putExtra("info_user",info_user);
+                                                        contexto.startActivity(i);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Write failed
+                                                        Toast.makeText(contexto,"Fallo en registro de Guardia",Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
+                }else{
+                    Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -218,47 +243,56 @@ public class DataBaseHandler {
         tokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot0) {
-                if (snapshot0.exists()){
-                    if (snapshot0.getValue().toString().equals("Administradores")){
-                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
-                                }else{
-                                    userRef.setValue(administrador)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    // Write was successful!
-                                                    Toast.makeText(contexto,"Administrador registrado correctamente",Toast.LENGTH_LONG).show();
-                                                    Intent i = new Intent(contexto,AdminMainActivity.class);
-                                                    i.putExtra("info_user",info_user);
-                                                    contexto.startActivity(i);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    // Write failed
-                                                    Toast.makeText(contexto,"Fallo en registro de Administrador",Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                ConnectivityManager cm = (ConnectivityManager) contexto.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                if (connected){
+                    if (snapshot0.exists()){
+                        if (snapshot0.getValue().toString().equals("Administradores")){
+                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        Toast.makeText(contexto,"Este correo ya ha sido usado",Toast.LENGTH_LONG).show();
+                                    }else{
+                                        userRef.setValue(administrador)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Write was successful!
+                                                        Toast.makeText(contexto,"Administrador registrado correctamente",Toast.LENGTH_LONG).show();
+                                                        Intent i = new Intent(contexto,AdminMainActivity.class);
+                                                        i.putExtra("info_user",info_user);
+                                                        contexto.startActivity(i);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Write failed
+                                                        Toast.makeText(contexto,"Fallo en registro de Administrador",Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        }else{
+                            Toast.makeText(contexto,"Token invalido",Toast.LENGTH_LONG).show();
+                        }
                     }else{
                         Toast.makeText(contexto,"Token invalido",Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(contexto,"Token invalido",Toast.LENGTH_LONG).show();
+                    Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(contexto,"No hay conexión a Internet",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -456,10 +490,8 @@ public class DataBaseHandler {
         });
     }
 
-    public void getDenuncias(Context context, LinearLayout linearLayout, TextView noHayDelitosView){
+    public void getDenuncias(Context context, LinearLayout linearLayout, TextView noHayDelitosView,String uid){
 //        linearLayout.setPadding(0,0,0,50);
-
-
         this.db.getReference().child("Denuncia").orderByChild("tsLong")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -473,7 +505,6 @@ public class DataBaseHandler {
                                 CrimeInfo crime = dataSnapshot.getValue(CrimeInfo.class);
 
                                 System.out.println(crime);
-
                                 CardCrime car = printCardView(context,crime);
                                 car.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -488,6 +519,7 @@ public class DataBaseHandler {
                                         info_crime.put("victim_issue",car.getCrime().getDescripcion());
                                         info_crime.put("victim_lat",String.valueOf(car.getCrime().getUbicacion().getLatitud()));
                                         info_crime.put("victim_lon",String.valueOf(car.getCrime().getUbicacion().getLongitud()));
+                                        info_crime.put("guardia_id",uid);
                                         i.putExtra("info_crime",info_crime);
                                         context.startActivity(i);
                                     }

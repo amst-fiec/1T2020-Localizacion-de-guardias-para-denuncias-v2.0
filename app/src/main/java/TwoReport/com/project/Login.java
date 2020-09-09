@@ -2,6 +2,8 @@ package TwoReport.com.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -84,15 +86,29 @@ public class Login extends AppCompatActivity {
         }
 
     public void iniciarSesion(View view) {
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+        if(connected){
         estaLogeando = true;
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        }else{
+            Toast.makeText(getApplicationContext(),"No hay Conexión a Internet",Toast.LENGTH_LONG).show();
+        }
     }
 
     public void registrarUsuario(View v){
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+        if(connected){
         estaRegistrando = true;
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        }else{
+            Toast.makeText(getApplicationContext(),"No hay Conexión a Internet",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

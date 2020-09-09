@@ -6,6 +6,8 @@ public class Guardia {
     String email;
     String telefono;
     String photoUrl;
+    Double latitud;
+    Double longitud;
 
     public Guardia() {
     }
@@ -15,6 +17,15 @@ public class Guardia {
         this.email = email;
         this.telefono = telefono;
         this.photoUrl = photoUrl;
+    }
+
+    public Guardia(String nombreCompleto, String email, String telefono, String photoUrl,Double latitud, Double longitud) {
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
+        this.telefono = telefono;
+        this.photoUrl = photoUrl;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
     public Guardia(String uid, String nombreCompleto, String email, String telefono, String photoUrl) {
@@ -59,6 +70,22 @@ public class Guardia {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
     }
 
     public void setPhotoUrl(String photoUrl) {
