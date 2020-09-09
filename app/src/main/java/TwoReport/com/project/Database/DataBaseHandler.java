@@ -332,7 +332,6 @@ public class DataBaseHandler {
 //                }
                 boolean cercanos = false;
                 for (DataSnapshot guardSnapShot:snapshot.getChildren()){
-                    System.out.println(guardSnapShot);
                     Double latitud = (Double) guardSnapShot.child("latitud").getValue();
                     Double longitud = (Double) guardSnapShot.child("longitud").getValue();
                     LatLng latLngGuard = new LatLng(latitud,longitud);
@@ -355,8 +354,6 @@ public class DataBaseHandler {
                     Double d = R * c;
 
                     cercanos = cercanos || (d<100);
-                    System.out.println("DISTANCIA: \n");
-                    System.out.println(d);
                 }
                 if(cercanos==false){
                     if(incluirUsuario==true){
@@ -498,13 +495,8 @@ public class DataBaseHandler {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             linearLayout.removeAllViews();
-                            System.out.println("Snapshot del guardia y denuncias\n");
-//                        System.out.println(snapshot);
-                            System.out.println("Impresion en orden:  ");
                             for (DataSnapshot dataSnapshot:snapshot.getChildren()){
                                 CrimeInfo crime = dataSnapshot.getValue(CrimeInfo.class);
-
-                                System.out.println(crime);
                                 CardCrime car = printCardView(context,crime);
                                 car.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -526,7 +518,6 @@ public class DataBaseHandler {
                                 });
                                 linearLayout.addView(car);
                             }
-                            System.out.println("FIN DE IMPRESION");
                         }else{
                             linearLayout.removeAllViews();
                             linearLayout.addView(noHayDelitosView);
@@ -617,7 +608,7 @@ public class DataBaseHandler {
                     for(DataSnapshot snapshot1:snapshot.getChildren()){
 
                         CrimeInfo denuncia = snapshot1.getValue(CrimeInfo.class);
-                        System.out.println(denuncia);
+
                         Location location = denuncia.getUbicacion();
                         LatLng latLng = new LatLng(location.getLatitud(),location.getLongitud());
                         mMap.addMarker(new MarkerOptions().position(latLng).icon(getBitmapDescriptor(R.drawable.ic_person,resources)).title(denuncia.getUsuario().getNombreCompleto()));

@@ -194,8 +194,6 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
                             android.location.Location location = task.getResult();
                             if (location != null){
                                 LatLng posicion = new LatLng(location.getLatitude(),location.getLongitude());
-//                                System.out.println("LATITUD     "+String.valueOf(location.getLatitude()));
-//                                System.out.println("LONGITUD     "+String.valueOf(location.getLongitude()));
                                 locationByGpsEmbed.setLatitud(location.getLatitude());
                                 locationByGpsEmbed.setLongitud(location.getLongitude());
                                 if (!(location.getLatitude()==0.0) || !(location.getLongitude()==0.0)){
@@ -232,11 +230,6 @@ public class ReportFragment extends Fragment implements OnMapReadyCallback {
         embedGpsBtn.setBackgroundColor(Color.parseColor(COLOR_PRESSED));
         iButtonGpsBtn.setBackgroundColor(Color.parseColor(COLOR_NOT_PRESSED));
         Toast.makeText(getContext(),"Gps Embebido Activado",Toast.LENGTH_LONG).show();
-//        handlerGps.postDelayed(rGps, 1000);
-//        location.setLongitud(locationByGpsEmbed.getLongitud());
-//        location.setLatitud(locationByGpsEmbed.getLatitud());
-//        System.out.println("LATITUD     "+String.valueOf(locationByGpsEmbed.getLatitud()));
-//        System.out.println("LONGITUD     "+String.valueOf(locationByGpsEmbed.getLatitud()));
         db.getGeoLocalizacion(getContext(),info_user.get("user_id"),mMap,getResources(),location,false,GuardiasMarkers,markerArray,locationByGpsEmbed);
     }
 

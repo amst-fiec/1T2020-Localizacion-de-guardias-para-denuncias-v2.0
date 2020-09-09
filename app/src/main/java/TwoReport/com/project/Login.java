@@ -136,7 +136,6 @@ public class Login extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
-                        System.out.println("error");
                         updateUI(null);
                     }
                 });
@@ -157,12 +156,10 @@ public class Login extends AppCompatActivity {
             /* Verifico que a que tipo de usuario pertenece el Login Entrante*/
 
         } else {
-            System.out.println("sin registrarse");
         }
     }
 
     public void checkUser(String uid,HashMap<String, String> info_user){
-//        System.out.println(uid);
         DataBaseHandler db = new DataBaseHandler(FirebaseDatabase.getInstance());
         if (estaRegistrando){
             estaRegistrando = false;
