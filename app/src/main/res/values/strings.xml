@@ -18,12 +18,11 @@
     <string name="victim_email">Email de la victima</string>
     <string name="victim_issue">Demanda</string>
     <string name="locate">Localización</string>
-<<<<<<< HEAD
     <string name="title_activity_crime_list">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-=======
+
     <string name="tipo_usuario_text">Tipo de Usuario</string>
     <string name="token_text">Token de Registro</string>
     <string name="token_input_text">Pegue aquí su Token de registro</string>
@@ -33,7 +32,7 @@
     <string name="location_descripcion_text">Descripción de ubicación</string>
     <string name="SelectionIbutton">GPS iButton</string>
     <string name="SelectionGpsEmbed">GPS embebido</string>
->>>>>>> WinterAlava
+
 
 
 </resources>
