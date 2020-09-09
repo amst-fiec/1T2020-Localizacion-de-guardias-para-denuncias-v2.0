@@ -2,13 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/admin_nav"
-    app:startDestination="@id/mapsFragment">
-    <fragment
-        android:id="@+id/mapsFragment"
-        android:name="TwoReport.com.project.AdministradorPackage.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+    android:id="@+id/guard_nav"
+    app:startDestination="@id/reportesFragment">
+
     <fragment
         android:id="@+id/reportesFragment"
         android:name="TwoReport.com.project.UsuarioPackage.ReportFragment"

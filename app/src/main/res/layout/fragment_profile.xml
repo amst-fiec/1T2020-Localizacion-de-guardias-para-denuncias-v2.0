@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ProfileFragment" >
+    tools:context=".UsuarioPackage.ProfileFragment" >
 
     <TextView
         android:id="@+id/txtProfile"
@@ -74,44 +74,24 @@
             android:paddingLeft="40dp"
             android:text="CORREO ELECTRONICO" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="20dp"
-            android:text="@string/username_text"
-            android:textColor="#2196F3"
-            android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="0dp"
-            android:ems="10"
-            android:hint="Usuario"
-            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="20dp"
             android:paddingLeft="20dp"
             android:text="@string/telefono_contacto_text"
             android:textColor="#2196F3"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/editText5"
+        <TextView
+            android:id="@+id/txtPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
             android:ems="10"
             android:hint="Teléfono de emergencia"

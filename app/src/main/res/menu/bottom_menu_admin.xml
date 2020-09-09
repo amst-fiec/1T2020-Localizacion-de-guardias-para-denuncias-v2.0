@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/reportFragment"
-        android:title="Reportar"
-        android:icon="@drawable/ic_report" />
+        android:id="@+id/mapsFragment"
+        android:title="Mapa"
+        android:icon="@drawable/ic_map" />
     <item
-        android:id="@+id/profileFragment"
-        android:title="Perfil"
-        android:icon="@drawable/ic_profile" />
+        android:id="@+id/reportadminFragment"
+        android:title="Reportes"
+        android:icon="@drawable/ic_report" />
     <item
         android:id="@+id/outApp"
         android:title="Salir"

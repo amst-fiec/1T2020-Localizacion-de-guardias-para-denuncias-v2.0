@@ -6,14 +6,37 @@ public class CrimeInfo  {
     private Usuario usuario;
     private Location ubicacion;
     private String descripcion;
+    private String lugar;
     private String fecha;
     private String TipoCrimen;
+    private Long tsLong;
 
-    public CrimeInfo( String descripcion, String fecha, String tipoCrimen) {
-
+    public CrimeInfo(){}
+    public CrimeInfo(Usuario usuario, Location ubicacion, String descripcion,String lugar, String fecha, String tipoCrimen,Long tsLong) {
+        this.usuario = usuario;
+        this.ubicacion = ubicacion;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        TipoCrimen = tipoCrimen;
+        this.TipoCrimen = tipoCrimen;
+        this.lugar = lugar;
+        this.tsLong = tsLong;
+
+    }
+
+    public Long getTsLong() {
+        return tsLong;
+    }
+
+    public void setTsLong(Long tsLong) {
+        this.tsLong = tsLong;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
     }
 
     public Usuario getUsuario() {

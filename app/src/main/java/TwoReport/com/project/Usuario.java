@@ -1,30 +1,67 @@
 package TwoReport.com.project;
 
-public class Usuario extends Users {
-    private Location ubicacion;
-    private String telefono;
+public class Usuario {
+    String uid;
+    String nombreCompleto;
+    String email;
+    String telefono;
+    String photoUrl;
 
-    public Usuario(String nombre, String email, String contrasenia, String usuario, Location ubicacion, String telefono) {
-        super(nombre, email, contrasenia, usuario);
-        this.ubicacion = ubicacion;
+    public Usuario() {
+    }
+
+    public Usuario(String nombreCompleto, String email, String telefono, String photoUrl) {
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
         this.telefono = telefono;
+        this.photoUrl = photoUrl;
     }
 
-
-
-    public Location getUbicacion() {
-        return ubicacion;
+    public Usuario(String uid, String nombreCompleto, String email, String telefono, String photoUrl) {
+        this.uid = uid;
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
+        this.telefono = telefono;
+        this.photoUrl = photoUrl;
     }
 
-    public void setUbicacion(Location ubicacion) {
-        this.ubicacion = ubicacion;
+    public String getUid() {
+        return uid;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getTelefono() {
         return telefono;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
