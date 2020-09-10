@@ -22,6 +22,7 @@
         android:layout_height="45dp"
         android:background="#D9FDFBFB"
         android:drawableLeft="@drawable/ic_profile"
+        android:paddingLeft="20dp"
         android:ems="10"
         android:hint="Usuario"
         android:inputType="textPersonName"
@@ -88,7 +89,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:textAlignment="center"
-            android:text="Iniciar sesion" />
+            android:text="Iniciar sesion con Google" />
 
     <Button
         android:id="@+id/btn_register"
