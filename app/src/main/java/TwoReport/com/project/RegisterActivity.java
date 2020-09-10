@@ -86,9 +86,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         }else if(spinner.getSelectedItem().toString().equals("Guardias")){
             Guardia guardia;
             if (user_phone == null){
-                guardia = new Guardia(user_name,user_email,phoneView.getText().toString(),user_photo,0.0,0.0);
+                guardia = new Guardia(user_name,user_email,phoneView.getText().toString(),user_photo,-2.145983, -79.965755);
             }else{
-                guardia = new Guardia(user_name,user_email,user_phone,user_photo,0.0,0.0);
+                guardia = new Guardia(user_name,user_email,user_phone,user_photo,-2.145983, -79.965755);
             }
             db.registrarGuardia(user_id,guardia,this,tokenText.getText().toString(),info_user);
         }else if(spinner.getSelectedItem().toString().equals("Administradores")){
